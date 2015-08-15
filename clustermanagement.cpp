@@ -129,6 +129,10 @@ void ClusterManagement::on_BtnAddClusters_clicked() {
                         Variables::clusterNames.append(ui->lineEditClusterName->text());
                         Variables::hostNames.append(ui->lineEditHostname->text());
                         Variables::usernamePasswords.append(base64_encode(ui->lineEditUsername->text() + QString::fromStdString(":") + ui->lineEditPassword->text()));
+                        ui->lineEditClusterName->setText("");
+                        ui->lineEditHostname->setText("");
+                        ui->lineEditPassword->setText("");
+                        ui->lineEditUsername->setText("");
                     } else {
                         // Maybe popup here? because we weren't able to connect
                         qDebug() << "Item not found, adding!";
@@ -141,6 +145,10 @@ void ClusterManagement::on_BtnAddClusters_clicked() {
                         Variables::clusterNames.append(ui->lineEditClusterName->text());
                         Variables::hostNames.append(ui->lineEditHostname->text());
                         Variables::usernamePasswords.append(base64_encode(ui->lineEditUsername->text() + QString::fromStdString(":") + ui->lineEditPassword->text()));
+                        ui->lineEditClusterName->setText("");
+                        ui->lineEditHostname->setText("");
+                        ui->lineEditPassword->setText("");
+                        ui->lineEditUsername->setText("");
                     }
                 } else {
                     // Just add the item
@@ -154,6 +162,10 @@ void ClusterManagement::on_BtnAddClusters_clicked() {
                     Variables::clusterNames.append(ui->lineEditClusterName->text());
                     Variables::hostNames.append(ui->lineEditHostname->text());
                     Variables::usernamePasswords.append(base64_encode(ui->lineEditUsername->text() + QString::fromStdString(":") + ui->lineEditPassword->text()));
+                    ui->lineEditClusterName->setText("");
+                    ui->lineEditHostname->setText("");
+                    ui->lineEditPassword->setText("");
+                    ui->lineEditUsername->setText("");
                 }
             }
         } else {
@@ -173,6 +185,10 @@ void ClusterManagement::on_BtnAddClusters_clicked() {
                         Variables::clusterNames.append(ui->lineEditHostname->text());
                         Variables::hostNames.append(ui->lineEditHostname->text());
                         Variables::usernamePasswords.append(base64_encode(ui->lineEditUsername->text() + QString::fromStdString(":") + ui->lineEditPassword->text()));
+                        ui->lineEditClusterName->setText("");
+                        ui->lineEditHostname->setText("");
+                        ui->lineEditPassword->setText("");
+                        ui->lineEditUsername->setText("");
                     } else {
                         // Maybe popup here? because we weren't able to connect
                         qDebug() << "Item not found, adding!";
@@ -185,6 +201,10 @@ void ClusterManagement::on_BtnAddClusters_clicked() {
                         Variables::clusterNames.append(ui->lineEditHostname->text());
                         Variables::hostNames.append(ui->lineEditHostname->text());
                         Variables::usernamePasswords.append(base64_encode(ui->lineEditUsername->text() + QString::fromStdString(":") + ui->lineEditPassword->text()));
+                        ui->lineEditClusterName->setText("");
+                        ui->lineEditHostname->setText("");
+                        ui->lineEditPassword->setText("");
+                        ui->lineEditUsername->setText("");
                     }
                 } else {
                     // Just add the item
@@ -198,6 +218,10 @@ void ClusterManagement::on_BtnAddClusters_clicked() {
                     Variables::clusterNames.append(ui->lineEditHostname->text());
                     Variables::hostNames.append(ui->lineEditHostname->text());
                     Variables::usernamePasswords.append(base64_encode(ui->lineEditUsername->text() + QString::fromStdString(":") + ui->lineEditPassword->text()));
+                    ui->lineEditClusterName->setText("");
+                    ui->lineEditHostname->setText("");
+                    ui->lineEditPassword->setText("");
+                    ui->lineEditUsername->setText("");
                 }
             }
         }

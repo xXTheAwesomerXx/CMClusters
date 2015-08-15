@@ -19,6 +19,8 @@
 #include <QFile>
 #include <QMessageBox>
 #include "progressdialog.h"
+#include <QDomDocument>
+#include <QColor>
 
 using namespace Variables;
 QVector<QListWidget*> myList;
@@ -32,6 +34,7 @@ TabbedMainWindow::TabbedMainWindow(QWidget *parent) : QMainWindow(parent), ui(ne
     for (int i = 0; i < clusterNamesF.count(); i++) {
         ClusterTab * tab = new ClusterTab();
         myList.append(tab->listWidget);
+        tab->listWidget->setStyleSheet("QListView::item:selected:active { background: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(58, 58, 58, 255), stop:1 rgba(90, 90, 90, 255)) } QListView::item:hover { background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #FAFBFE, stop: 1 #DCDEF1); }");
         tab->setHostname(Variables::hostNamesF[i]);
         tab->setClusterName(Variables::clusterNamesF[i]);
         tab->setUsernamePassword(Variables::usernamePasswordsF[i]);
@@ -40,7 +43,7 @@ TabbedMainWindow::TabbedMainWindow(QWidget *parent) : QMainWindow(parent), ui(ne
     }
     QStringList queryTypeList, queryParameter1;
     queryParameter1 << "Equals" << "Contains" << "Begins with" << "Ends with" << "Is Empty" << "Is not Empty";
-    queryTypeList << "Firstname" << "Middlename" << "Lastname" << "UserID" << "Is in Cluster";
+    queryTypeList << "Firstname" << "Middlename" << "Lastname" << "UserID" << "Is in Cluster" << "Telephone Number";
     ui->comboBoxQueryType->addItems(queryTypeList);
     ui->comboBoxQueryParameter->addItems(queryParameter1);
 }
@@ -109,16 +112,130 @@ void TabbedMainWindow::on_pushButtonFindUsers_clicked()
         qDebug() << usernamePasswordsF[i];
     }
     int selectedType = ui->comboBoxQueryType->currentIndex();
-    int selectedParameter = ui->comboBoxQueryParameter->currentIndex();
+    QString selectedParameter = ui->comboBoxQueryParameter->currentText();
+    QString argumentData = ui->lineEditQueryData->text();
     for (int i = 0; i < myList.count(); i++) {
         // XXX: use this to update all lists, after getting their list data from getting the endusers
-        if (testConnection()) {
-            QListWidget * list = myList[i];
-            list->addItem("Test to Add Items");
-        } else {
-            QMessageBox::critical(this, "CMClusters - Error", "Could not connect to cluster!");
-        }
+        QListWidget * list = myList[i];
+        list->clear();
+        findUsers(Variables::hostNamesF[i], Variables::usernamePasswordsF[i], selectedType, selectedParameter, argumentData, list);
     }
+}
+
+void TabbedMainWindow::findUsers(QString hostname, QString usernamepassword, int condition1, QString condition2, QString argument, QListWidget * list) {
+    //First maybe we clear the dang list?!
+    QString condition1String, condition2String;
+
+    if (condition1 == 0) {
+        condition1String = "enduser.firstname";
+    } else if (condition1 == 1) {
+        condition1String = "enduser.middlename";
+    } else if (condition1 == 2) {
+        condition1String = "enduser.lastname";
+    } else if (condition1 == 3) {
+        condition1String = "enduser.userid";
+    } else if (condition1 == 4) {
+        condition1String = "enduser.islocaluser";
+    } else if (condition1 == 5) {
+        condition1String = "enduser.telephonenumber";
+    }
+
+    if (condition2 == "Equals") {
+        condition2String = "= '" + argument.toLower() + "'";
+    } else if (condition2 == "Contains") {
+        condition2String = "LIKE '%" + argument.toLower() + "%'";
+    } else if (condition2 == "Begins with") {
+        condition2String = "LIKE '" + argument.toLower() + "%'";
+    } else if (condition2 == "Ends with") {
+        condition2String = "LIKE '%" + argument.toLower() + "'";
+    } else if (condition2 == "Is Empty") {
+        condition2String = "IS NULL";
+    } else if (condition2 == "Is not Empty") {
+        condition2String = "IS NOT NULL";
+    } else if (condition2 == "True") {
+        condition2String = "= 't'";
+    } else if (condition2 == "False") {
+        condition2String = "= 'f'";
+    }
+
+    ProgressDialog progbar("CMClusters - Connecting...", "Please wait while a connection to the selected clusters are established!");
+    progbar.show();
+    QByteArray jsonString = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ns=\"http://www.cisco.com/AXL/API/8.5\">";
+    if (condition1 == 4) {
+        jsonString += "<soapenv:Body><ns:executeSQLQuery><sql>SELECT enduser.userid,enduser.firstname,enduser.middlename,enduser.lastname,enduser.islocaluser,enduser.telephonenumber from enduser where "
+                + condition1String + condition2String + "</sql></ns:executeSQLQuery></SOAP-ENV:Envelope>";
+    } else {
+    jsonString += "<soapenv:Body><ns:executeSQLQuery><sql>SELECT enduser.userid,enduser.firstname,enduser.middlename,enduser.lastname,enduser.islocaluser,enduser.telephonenumber from enduser where lower("
+            + condition1String + ") " + condition2String + "</sql></ns:executeSQLQuery></SOAP-ENV:Envelope>";
+    }
+    QByteArray postDataSize = QByteArray::number(jsonString.size());
+    QUrl req("https://" + hostname.toLocal8Bit() + ":8443/axl/");
+    QNetworkRequest request(req);
+
+    request.setRawHeader("SOAPAction", "\"CUCM:DB ver=8.5 executeSQLQuery\"");
+    request.setRawHeader("Authorization", "Basic " + usernamepassword.toLocal8Bit());
+    request.setRawHeader("Content-Type", "text/xml");
+    request.setRawHeader("Content-Length", postDataSize);
+
+    QNetworkAccessManager test;
+    QEventLoop loop;
+    connect(&test, SIGNAL(finished(QNetworkReply*)), &loop, SLOT(quit()));
+    QNetworkReply * reply = test.post(request, jsonString);
+    reply->ignoreSslErrors(); // Ignore only unsigned later on
+    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(onError(QNetworkReply::NetworkError)));
+    loop.exec();
+
+    QByteArray response = reply->readAll();
+    QVariant statusCode = reply->attribute( QNetworkRequest::HttpStatusCodeAttribute );
+
+    if ( !statusCode.isValid() ) {
+        qDebug() << "Failed...";
+        qDebug() << statusCode.data();
+    }
+
+    int status = statusCode.toInt();
+
+    if ( status != 200 ) {
+        QString reason = reply->attribute( QNetworkRequest::HttpReasonPhraseAttribute ).toString();
+        qDebug() << reason;
+    } else {
+        qDebug() << "Good reply";
+        //qDebug() << response;
+        QDomDocument doc;
+        doc.setContent(response);
+            QDomNodeList rates = doc.elementsByTagName("row");
+            for (int i = 0; i < rates.size(); i++) {
+                QString finalString;
+                QDomNode n = rates.item(i);
+                QDomElement firstname = n.firstChildElement("firstname");
+                if (firstname.text() != "")
+                    finalString = firstname.text() + " ";
+                QDomElement middlename = n.firstChildElement("middlename");
+                if (middlename.text() != "")
+                    finalString += middlename.text() + " ";
+                QDomElement lastname = n.firstChildElement("lastname");
+                if (lastname.text() != " ")
+                    finalString += lastname.text();
+                QDomElement userid = n.firstChildElement("userid");
+                finalString += " (" + userid.text() + ") ";
+                QDomElement islocaluser = n.firstChildElement("islocaluser");
+                QDomElement telephonenumber = n.firstChildElement("telephonenumber");
+                    if (telephonenumber.text() != "") {
+                        finalString += " [" + telephonenumber.text() + "]";
+                    } else {
+                        finalString += " [No Telephone Number]";
+                    }
+                QListWidgetItem* user = new QListWidgetItem(finalString);
+                if (islocaluser.text() == "t") {
+                    user->setBackground(QColor(0, 170, 255));
+                } else {
+                    user->setBackground(QColor(170, 0, 0));
+                }
+                list->addItem(user);
+                qDebug() << firstname.text().toLocal8Bit();
+            }
+    }
+    qDebug() << response;
 }
 
 void TabbedMainWindow::on_comboBoxQueryType_activated(int index)
