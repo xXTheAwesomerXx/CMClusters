@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>TabbedMainWindow</class>
+ <widget class="QMainWindow" name="TabbedMainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout_2">
+    <item>
+     <widget class="QGroupBox" name="groupBoxQuery">
+      <property name="title">
+       <string>Endusers Query</string>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayoutQuery">
+         <property name="spacing">
+          <number>5</number>
+         </property>
+         <property name="leftMargin">
+          <number>5</number>
+         </property>
+         <property name="rightMargin">
+          <number>5</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="labelFindUsers">
+           <property name="text">
+            <string>Find Users Where:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="comboBoxQueryType"/>
+         </item>
+         <item>
+          <widget class="QComboBox" name="comboBoxQueryParameter"/>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lineEditQueryData"/>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButtonFindUsers">
+           <property name="text">
+            <string>Find Users</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QLabel" name="labelExists">
+        <property name="text">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#00aa00;&quot;&gt;Enduser(s) is in Cluster&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="Line" name="line">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="labelNotExists">
+        <property name="text">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#00aaff;&quot;&gt;Enduser(s) is NOT in Cluster&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="Line" name="line_2">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="labelSelected">
+        <property name="text">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#aa0000;&quot;&gt;Enduser(s) selected for Editing&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <widget class="QTabWidget" name="tabWidgetClusters">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="currentIndex">
+       <number>-1</number>
+      </property>
+      <property name="tabsClosable">
+       <bool>true</bool>
+      </property>
+      <property name="movable">
+       <bool>true</bool>
+      </property>
+      <property name="tabBarAutoHide">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionBack_to_Cluster_Management"/>
+    <addaction name="separator"/>
+    <addaction name="actionExit"/>
+   </widget>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>Edit</string>
+    </property>
+    <addaction name="actionAdd_selected_Endusers_to_Cluster"/>
+    <addaction name="actionRemove_selected_Endusers_from_Cluster"/>
+    <addaction name="separator"/>
+    <addaction name="actionRemove_Endusers_from_all_other_Clusters"/>
+   </widget>
+   <widget class="QMenu" name="menuView">
+    <property name="title">
+     <string>View</string>
+    </property>
+    <addaction name="actionSwitch_to_Tree"/>
+    <addaction name="separator"/>
+    <addaction name="actionLogs"/>
+    <addaction name="separator"/>
+    <addaction name="actionEnduser_owned_Devices"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionView_Help_CTRL_SHIFT_F1"/>
+    <addaction name="separator"/>
+    <addaction name="actionFeedback"/>
+    <addaction name="actionView_Site"/>
+    <addaction name="actionProduct_Registration"/>
+    <addaction name="actionTechnical_Support"/>
+    <addaction name="separator"/>
+    <addaction name="actionAbout_CMClusters_CTRL_F1"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuEdit"/>
+   <addaction name="menuView"/>
+   <addaction name="menuHelp"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionBack_to_Cluster_Management">
+   <property name="text">
+    <string>Back to Cluster Management</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>Exit</string>
+   </property>
+  </action>
+  <action name="actionAdd_selected_Endusers_to_Cluster">
+   <property name="text">
+    <string>Add selected Endusers to Cluster</string>
+   </property>
+  </action>
+  <action name="actionView_Help_CTRL_SHIFT_F1">
+   <property name="text">
+    <string>View Help (CTRL+SHIFT+F1)</string>
+   </property>
+  </action>
+  <action name="actionFeedback">
+   <property name="text">
+    <string>Feedback</string>
+   </property>
+  </action>
+  <action name="actionView_Site">
+   <property name="text">
+    <string>View Site</string>
+   </property>
+  </action>
+  <action name="actionProduct_Registration">
+   <property name="text">
+    <string>Product Registration</string>
+   </property>
+  </action>
+  <action name="actionAbout_CMClusters_CTRL_F1">
+   <property name="text">
+    <string>About CMClusters (CTRL+F1)</string>
+   </property>
+  </action>
+  <action name="actionSwitch_to_Tree">
+   <property name="text">
+    <string>Switch to Tree View</string>
+   </property>
+  </action>
+  <action name="actionLogs">
+   <property name="text">
+    <string>Logs...</string>
+   </property>
+  </action>
+  <action name="actionRemove_selected_Endusers_from_Cluster">
+   <property name="text">
+    <string>Remove selected Endusers from Cluster</string>
+   </property>
+  </action>
+  <action name="actionRemove_Endusers_from_all_other_Clusters">
+   <property name="text">
+    <string>Remove Endusers from all other Clusters</string>
+   </property>
+  </action>
+  <action name="actionEnduser_owned_Devices">
+   <property name="text">
+    <string>Enduser owned Devices</string>
+   </property>
+  </action>
+  <action name="actionTechnical_Support">
+   <property name="text">
+    <string>Technical Support</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ClusterManagement</class>
+ <widget class="QMainWindow" name="ClusterManagement">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>690</width>
+    <height>400</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>CMClusters - Cluster Management</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QVBoxLayout" name="verticalLayout_2">
+    <item>
+     <widget class="QGroupBox" name="groupBoxCreds">
+      <property name="title">
+       <string>Cluster Credentials</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <property name="spacing">
+          <number>5</number>
+         </property>
+         <property name="leftMargin">
+          <number>10</number>
+         </property>
+         <property name="topMargin">
+          <number>5</number>
+         </property>
+         <property name="rightMargin">
+          <number>10</number>
+         </property>
+         <item>
+          <widget class="QLineEdit" name="lineEditClusterName">
+           <property name="toolTip">
+            <string>If no cluster name is specified the Hostname/IP Address will be used by default, otherwise please enter your chosen name for this cluster here</string>
+           </property>
+           <property name="placeholderText">
+            <string>Cluster Name</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lineEditHostname">
+           <property name="toolTip">
+            <string>Enter the Hostname/IP Address of the cluster you wish to add here</string>
+           </property>
+           <property name="placeholderText">
+            <string>Hostname/IP Address</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lineEditUsername">
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enter the username for the database connection you wish to add here, please note this user MUST be an Application User with the Super User and AXL User roles assigned, and not an Enduser&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="placeholderText">
+            <string>Username</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lineEditPassword">
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enter the password for the Application User you wish to use for a database connection here&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="echoMode">
+            <enum>QLineEdit::Password</enum>
+           </property>
+           <property name="placeholderText">
+            <string>Password</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="checkBoxConnect">
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Leave this box checked if you would like to verify a database connection upon adding this cluster (A logview needs to be opened to see results View-&amp;gt;Logs); The added cluster will be checked if a connection was successfully establshed.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="text">
+            <string>Connect</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+           <property name="tristate">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="BtnAddClusters">
+           <property name="text">
+            <string>Add Cluster</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QListWidget" name="listClusters">
+      <property name="alternatingRowColors">
+       <bool>false</bool>
+      </property>
+      <property name="selectionMode">
+       <enum>QAbstractItemView::MultiSelection</enum>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>690</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="autoFillBackground">
+    <bool>false</bool>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionLoad_Configuration"/>
+    <addaction name="actionSave_Configuration"/>
+    <addaction name="separator"/>
+    <addaction name="actionTest_Connections"/>
+    <addaction name="separator"/>
+    <addaction name="actionExit"/>
+   </widget>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>Edit</string>
+    </property>
+    <addaction name="actionAdd_Cluster"/>
+    <addaction name="actionRemove_Clusters"/>
+    <addaction name="separator"/>
+    <addaction name="actionColors"/>
+   </widget>
+   <widget class="QMenu" name="menuView">
+    <property name="title">
+     <string>View</string>
+    </property>
+    <widget class="QMenu" name="menuClusters">
+     <property name="title">
+      <string>Clusters</string>
+     </property>
+     <addaction name="actionAs_Tree"/>
+     <addaction name="actionAs_Tab"/>
+    </widget>
+    <addaction name="menuClusters"/>
+    <addaction name="actionClusters_Details"/>
+    <addaction name="separator"/>
+    <addaction name="actionLogs"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionView_Help"/>
+    <addaction name="separator"/>
+    <addaction name="actionFeedback"/>
+    <addaction name="actionView_Site"/>
+    <addaction name="actionRegister_Product"/>
+    <addaction name="actionTechnical_Support"/>
+    <addaction name="separator"/>
+    <addaction name="actionAbout_CMClusters"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuEdit"/>
+   <addaction name="menuView"/>
+   <addaction name="menuHelp"/>
+  </widget>
+  <action name="actionLoad_Configuration">
+   <property name="text">
+    <string>Load Configuration (CTRL+L)</string>
+   </property>
+  </action>
+  <action name="actionSave_Configuration">
+   <property name="text">
+    <string>Save Configuration (CTRL+S)</string>
+   </property>
+  </action>
+  <action name="actionTest_Connections">
+   <property name="text">
+    <string>Test Connection(s)</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>Exit</string>
+   </property>
+  </action>
+  <action name="actionAdd_Cluster">
+   <property name="text">
+    <string>Add Cluster (CTRL+A)</string>
+   </property>
+  </action>
+  <action name="actionRemove_Clusters">
+   <property name="text">
+    <string>Remove Cluster(s) (CTRL+DEL)</string>
+   </property>
+  </action>
+  <action name="actionColors">
+   <property name="text">
+    <string>Colors (CTRL+C)</string>
+   </property>
+  </action>
+  <action name="actionAs_Tree">
+   <property name="text">
+    <string>As Tree...</string>
+   </property>
+  </action>
+  <action name="actionAs_Tab">
+   <property name="text">
+    <string>As Tab(s)...</string>
+   </property>
+  </action>
+  <action name="actionLogs">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Logs...</string>
+   </property>
+   <property name="toolTip">
+    <string>Select this if you would like to view logs</string>
+   </property>
+  </action>
+  <action name="actionView_Help">
+   <property name="text">
+    <string>View Help (CTRL+SHIFT+F1)</string>
+   </property>
+  </action>
+  <action name="actionFeedback">
+   <property name="text">
+    <string>Feedback</string>
+   </property>
+  </action>
+  <action name="actionView_Site">
+   <property name="text">
+    <string>View Site</string>
+   </property>
+  </action>
+  <action name="actionRegister_Product">
+   <property name="text">
+    <string>Register Product</string>
+   </property>
+  </action>
+  <action name="actionTechnical_Support">
+   <property name="text">
+    <string>Technical Support</string>
+   </property>
+  </action>
+  <action name="actionAbout_CMClusters">
+   <property name="text">
+    <string>About CMClusters (CTRL+F1)</string>
+   </property>
+  </action>
+  <action name="actionClusters_Details">
+   <property name="text">
+    <string>Cluster(s) Details</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>
