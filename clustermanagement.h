@@ -30,6 +30,10 @@ private slots:
     void onError(QNetworkReply::NetworkError reply);
     void on_actionTest_Connections_triggered();
 
+    void on_btnNext_clicked();
+
+    void on_btnTestConnections_clicked();
+
 private:
     Ui::ClusterManagement *ui;
     TabbedMainWindow *tabbedwindow;

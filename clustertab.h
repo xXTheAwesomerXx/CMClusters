@@ -16,6 +16,7 @@ public:
     explicit ClusterTab(QWidget *parent = 0);
     ~ClusterTab();
     QListWidget *listWidget;
+    QListWidget *listWidget2; //Actually the first in the list
     void addListItem(QString);
     QString getClusterName();
     QString getHostname();

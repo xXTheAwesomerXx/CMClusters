@@ -11,7 +11,9 @@ ClusterTab::ClusterTab(QWidget *parent) :
 {
     ui->setupUi(this);
     listWidget = new QListWidget;
+    listWidget2 = new QListWidget;
     ui->scrollArea->setWidget(listWidget);
+    ui->scrollArea_2->setWidget(listWidget2);
 }
 
 void ClusterTab::addListItem(QString newItem)

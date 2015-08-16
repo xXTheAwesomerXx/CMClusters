@@ -269,3 +269,33 @@ void ClusterManagement::on_actionTest_Connections_triggered()
                 ui->listClusters->item(i)->setCheckState(Qt::Checked);
     }
 }
+
+void ClusterManagement::on_btnNext_clicked()
+{
+    int numOfConns = 0;
+    for (int i = 0; i < ui->listClusters->count(); i++) {
+        if (ui->listClusters->item(i)->checkState() == Qt::Checked) {
+            Variables::clusterNamesF.append(Variables::clusterNames[i]);
+            Variables::hostNamesF.append(Variables::hostNames[i]);
+            Variables::usernamePasswordsF.append(Variables::usernamePasswords[i]);
+            numOfConns++;
+        }
+    }
+    if (numOfConns > 0) {
+        this->hide();//Correct 'hiding' so that we won't have to RELOAD contact points
+        tabbedwindow = new TabbedMainWindow(this);
+        tabbedwindow->show();
+
+    } else {
+        QMessageBox::critical(this, "CMClusters - Error", "No clusters were selected! Please select at least one cluster and try again. \n\n Before being able to select a cluster, you must first test the connection!");
+    }
+}
+
+void ClusterManagement::on_btnTestConnections_clicked()
+{
+    for (int i = 0; i < ui->listClusters->count(); i++) {
+        if (ui->listClusters->item(i)->isSelected())
+            if (addConnection(Variables::hostNames[i], Variables::usernamePasswords[i]))
+                ui->listClusters->item(i)->setCheckState(Qt::Checked);
+    }
+}
